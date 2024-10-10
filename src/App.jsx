@@ -20,14 +20,6 @@ const initialTravellers = [
   {
     id: 5, name: 'Mary', phone: 88881111,
     bookingTime: new Date(),
-  },
-  {
-    id: 6, name: 'John', phone: 88880000,
-    bookingTime: new Date(),
-  },
-  {
-    id: 7, name: 'Lucy', phone: 88889999,
-    bookingTime: new Date(),
   }
 ];
 
@@ -166,15 +158,18 @@ class DisplayFreeSeats extends React.Component {
     };
 
     return (
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '10px', width: 'fit-content' }}>
-        {/* 使用 Array.from 来渲染座位 */}
-        {Array.from({ length: this.state.total }, (_, index) => (
-          <div
-            key={index}
-            style={index < this.state.free ? seatStyle : occupiedSeatStyle}
-          ></div>
-        ))}
+      <div style={{ display:'flex',justifyContent:'center'}}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 40px) 80px repeat(3, 40px) 80px repeat(3, 40px)', gap: '10px', width: 'fit-content' }}>
+          {/* 使用 Array.from 来渲染座位 */}
+          {Array.from({ length: this.state.total }, (_, index) => (
+            <div
+              key={index}
+              style={index < this.state.free ? seatStyle : occupiedSeatStyle}
+            ></div>
+          ))}
+        </div>
       </div>
+
     );
   }
 }
@@ -228,9 +223,9 @@ class TicketToRide extends React.Component {
       return;
     }
     //actual addition
-    this.setState({ 
-      travellers: [...this.state.travellers, { id: this.state.maxId+1, name: passenger.name, phone: passenger.phone, bookingTime: new Date() }],
-      maxId: this.state.maxId+1
+    this.setState({
+      travellers: [...this.state.travellers, { id: this.state.maxId + 1, name: passenger.name, phone: passenger.phone, bookingTime: new Date() }],
+      maxId: this.state.maxId + 1
     });
   }
 
@@ -249,13 +244,13 @@ class TicketToRide extends React.Component {
       if (element.name !== passenger) {
         newlist.push(element);
       }
-    if (newlist.length === this.state.travellers.length) {
-      alert("Traveller not found.");
-    } else {
-      console.log("Traveller deleted successfully.");  this.setState({ travellers: newlist });
-    }
-    // console.log(this.state.travellers); //won't work because setState is asynchronous
-  });
+      if (newlist.length === this.state.travellers.length) {
+        alert("Traveller not found.");
+      } else {
+        console.log("Traveller deleted successfully."); this.setState({ travellers: newlist });
+      }
+      // console.log(this.state.travellers); //won't work because setState is asynchronous
+    });
   }
 
   render() {
