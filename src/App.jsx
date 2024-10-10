@@ -34,9 +34,23 @@ const initialTravellers = [
 
 function TravellerRow(props) {
   {/*Q3. Placeholder to initialize local variable based on traveller prop.*/ }
+  const traveller = props.traveller;
+  const formatTime = (date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${year}/${month}/${day} ${hours}:${minutes}`;
+  };
+
   return (
     <tr>
       {/*Q3. Placeholder for rendering one row of a table with required traveller attribute values.*/}
+      <td>{traveller.id}</td>
+      <td>{traveller.name}</td>
+      <td>{traveller.phone}</td>
+      <td>{formatTime(traveller.bookingTime)}</td>
     </tr>
   );
 }
@@ -58,6 +72,9 @@ function Display(props) {
       </thead>
       <tbody>
         {/*Q3. write code to call the JS variable defined at the top of this function to render table rows.*/}
+        {props.travellers.map(traveller => (
+          <TravellerRow key={traveller.id} traveller={traveller} />
+        ))}
       </tbody>
     </table>
   );
@@ -161,9 +178,11 @@ class DisplayFreeSeats extends React.Component {
 class TicketToRide extends React.Component {
   constructor() {
     super();
-    this.state = { travellers: [], selector: 1, 
-      totalSeatNumber: 10, 
-      occupiedSeatNumber: initialTravellers.length };
+    this.state = {
+      travellers: [], selector: 1,
+      totalSeatNumber: 10,
+      occupiedSeatNumber: initialTravellers.length
+    };
     this.bookTraveller = this.bookTraveller.bind(this);
     this.deleteTraveller = this.deleteTraveller.bind(this);
   }
@@ -187,7 +206,7 @@ class TicketToRide extends React.Component {
   }
   loadData() {
     setTimeout(() => {
-      this.setState({ 
+      this.setState({
         travellers: initialTravellers
       });
     }, 500);
@@ -251,14 +270,14 @@ class TicketToRide extends React.Component {
           {/*Q2. Code for Navigation bar. Use basic buttons to create a nav bar. Use states to manage selection.*/}
           <nav>
             <ul style={navStyle.ul}>
-              <li style={this.state.selector === 1 ? navStyle.liHover:navStyle.li} onClick={() => this.setSelector(1)}>Homepage</li>
-              <li style={this.state.selector === 2 ? navStyle.liHover:navStyle.li} onClick={() => this.setSelector(2)}>Display</li>
-              <li style={this.state.selector === 3 ? navStyle.liHover:navStyle.li} onClick={() => this.setSelector(3)}>Add</li>
-              <li style={this.state.selector === 4 ? navStyle.liHover:navStyle.li} onClick={() => this.setSelector(4)}>Delete</li>
+              <li style={this.state.selector === 1 ? navStyle.liHover : navStyle.li} onClick={() => this.setSelector(1)}>Homepage</li>
+              <li style={this.state.selector === 2 ? navStyle.liHover : navStyle.li} onClick={() => this.setSelector(2)}>Display</li>
+              <li style={this.state.selector === 3 ? navStyle.liHover : navStyle.li} onClick={() => this.setSelector(3)}>Add</li>
+              <li style={this.state.selector === 4 ? navStyle.liHover : navStyle.li} onClick={() => this.setSelector(4)}>Delete</li>
             </ul>
           </nav>
         </div>
-        <div style={{margin:"2rem 1rem"}}>
+        <div style={{ margin: "2rem 1rem" }}>
           {/*Only one of the below four divisions is rendered based on the button clicked by the user.*/}
           {/*Q2 and Q6. Code to call Instance that draws Homepage. Homepage shows Visual Representation of free seats.*/}
           {this.state.selector === 1 && <Homepage totalSeatNumber={this.state.totalSeatNumber} occupiedSeatNumber={this.state.occupiedSeatNumber} />}
