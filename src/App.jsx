@@ -185,7 +185,8 @@ class TicketToRide extends React.Component {
     this.state = {
       travellers: [], selector: 1,
       totalSeatNumber: 10,
-      occupiedSeatNumber: initialTravellers.length
+      occupiedSeatNumber: initialTravellers.length,
+      maxId: initialTravellers.length
     };
     this.bookTraveller = this.bookTraveller.bind(this);
     this.deleteTraveller = this.deleteTraveller.bind(this);
@@ -222,13 +223,24 @@ class TicketToRide extends React.Component {
   bookTraveller(passenger) {
     /*Q4. Write code to add a passenger to the traveller state variable.*/
     console.log("TicketToRide/bookTraveller function:", passenger);
+    if (this.state.travellers.length >= this.state.totalSeatNumber) {
+      alert("All seats have been booked.");
+      return;
+    }
     //actual addition
-    this.setState({ travellers: [...this.state.travellers, { id: this.state.travellers.length + 1, name: passenger.name, phone: passenger.phone, bookingTime: new Date() }] });
+    this.setState({ 
+      travellers: [...this.state.travellers, { id: this.state.maxId+1, name: passenger.name, phone: passenger.phone, bookingTime: new Date() }],
+      maxId: this.state.maxId+1
+    });
   }
 
   deleteTraveller(passenger) {
     /*Q5. Write code to delete a passenger from the traveller state variable.*/
     console.log("TicketToRide/deleteTraveller function:", passenger);
+    if (this.state.travellers.length === 0) {
+      alert("No travellers to delete.");
+      return;
+    }
     //actual deletion
     var newlist = [];
     // this refers to TicketToRide or the caller of the function(Class Delete)
@@ -237,13 +249,15 @@ class TicketToRide extends React.Component {
       if (element.name !== passenger) {
         newlist.push(element);
       }
-    });
-    this.setState({ 
-      travellers: newlist
-      // ,occupiedSeatNumber: newlist.length
-    });
+    if (newlist.length === this.state.travellers.length) {
+      alert("Traveller not found.");
+    } else {
+      console.log("Traveller deleted successfully.");  this.setState({ travellers: newlist });
+    }
     // console.log(this.state.travellers); //won't work because setState is asynchronous
+  });
   }
+
   render() {
     const navStyle = {
       ul: {
