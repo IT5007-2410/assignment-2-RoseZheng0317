@@ -89,6 +89,9 @@ class Add extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     /*Q4. Fetch the passenger details from the add form and call bookTraveller()*/
+    const form = document.forms.addTraveller;
+    console.log("Add component/handleSubmit()", form.travellername.value); //check to make sure the pipeline is correct
+    this.props.bookTraveller({ name: form.travellername.value, phone: form.travellerphone.value });
   }
 
   render() {
@@ -96,6 +99,7 @@ class Add extends React.Component {
       <form name="addTraveller" onSubmit={this.handleSubmit}>
         {/*Q4. Placeholder to enter passenger details. Below code is just an example.*/}
         <input type="text" name="travellername" placeholder="Name" />
+        <input type="text" name="travellerphone" placeholder="Phone" />
         <button>Add</button>
       </form>
     );
@@ -203,6 +207,9 @@ class TicketToRide extends React.Component {
   }
   componentDidUpdate() {
     console.log("componentDidUpdate(onChange)", this.state.travellers);
+    if (this.state.occupiedSeatNumber !== this.state.travellers.length) {
+      this.setState({ occupiedSeatNumber: this.state.travellers.length });
+    }
   }
   loadData() {
     setTimeout(() => {
@@ -214,6 +221,9 @@ class TicketToRide extends React.Component {
 
   bookTraveller(passenger) {
     /*Q4. Write code to add a passenger to the traveller state variable.*/
+    console.log("TicketToRide/bookTraveller function:", passenger);
+    //actual addition
+    this.setState({ travellers: [...this.state.travellers, { id: this.state.travellers.length + 1, name: passenger.name, phone: passenger.phone, bookingTime: new Date() }] });
   }
 
   deleteTraveller(passenger) {
@@ -228,7 +238,10 @@ class TicketToRide extends React.Component {
         newlist.push(element);
       }
     });
-    this.setState({ travellers: newlist });
+    this.setState({ 
+      travellers: newlist
+      // ,occupiedSeatNumber: newlist.length
+    });
     // console.log(this.state.travellers); //won't work because setState is asynchronous
   }
   render() {
